@@ -28,8 +28,8 @@ app.get("/api/v1/users", (request, response, next)=>{
             status: "active",
         },
         {
-            name: "Jane",
-            surname: "Scotch",
+            name: "John",
+            surname: "Wick",
             status: "passive",
         }
     ]
