@@ -1,42 +1,52 @@
+const { response } = require("express");
 const express = require("express");
 const fs = require("fs");
 const { request } = require("http");
 const path = require("path");
+const { stringify } = require ("querystring");
 
 const app = express();
 const port = 9000;
-
-
-app.use(express.json());
-
 const fFolder = path.join(`${__dirname}/../frontend`);
 
 
-app.use('/pub', express.static(`${fFolder}/../frontend/public`));
+/* APP USE */
 
+app.use(express.json());
+
+app.use('/pub', express.static(`${fFolder}/public`));
+
+/* END OF APP USE */
+
+/* APP GET */
 
 app.get("/", (request, response, next)=>{
     response.sendFile(path.join(`${__dirname}/../frontend/index.html`));
 });
 
+
 app.get("/admin/order-view", (request, response, next)=>{
     response.sendFile(path.join(`${__dirname}/../frontend/index.html`));
 });
 
+
 app.get("/kismacska", (request, response, next)=>{
     response.sendFile(path.join(`${__dirname}/../frontend/somefile.json`));
 });
+
 
 app.get("/something", (request, response, next)=>{
     console.log("Request received for something endpoint.")
     response.send("Thank you for Your request! This is our response for something endpoint.")
 });
 
+
 app.get("/api/v1/users", (request, response, next)=>{
     console.log("Request received for users endpoint")
     response.sendFile(path.join(`${__dirname}/../frontend/users.json`));
 });
     
+
 app.get("/api/v1/users-query", (request, response, next)=>{
     console.dir(request.query)
     console.dir(request.query.apiKey)
@@ -58,9 +68,8 @@ app.get("/api/v1/users-params/:key", (request, response, next)=>{
     }
     response.send("Hello");
 });
- */
 
-/* 
+
 app.get("/api/v1/users/active", (request, response, next)=>{
     fs.readFile("../frontend/users.json", (error, data) => {
         if (error) {
@@ -72,6 +81,7 @@ app.get("/api/v1/users/active", (request, response, next)=>{
         }
     })
 });
+
 
 app.get("/api/v1/users/passive", (request, response, next)=>{
     fs.readFile("../frontend/users.json", (error, data) => {
@@ -85,7 +95,9 @@ app.get("/api/v1/users/passive", (request, response, next)=>{
     })
 
 });
- */
+*/
+
+
 app.get("/api/v1/users-params/:key", (request, response, next)=>{
     fs.readFile("../frontend/users.json", (error, data) => {
         console.dir(request.params)
@@ -101,19 +113,19 @@ app.get("/api/v1/users-params/:key", (request, response, next)=>{
 
 });
 
+/* END OF APP GET */
 
-app.post("users/new", (request, response) => {
-    fs.readFile(`${frontend}/users.json`, (error, data) => {
+app.post("/users/new", (request, response) => {
+    fs.readFile(`${fFolder}/users.json`, (error, data) => {
         if (error){
             console.log("Error")
             response.send("There is an error reading users file.")
         } else {
             const users = JSON.parse(data);
             console.log(request.body);
-
             users.push(request.body);
 
-            fs.writeFile(`${frontend}/users.json`, JSON.stringify(users), error => {
+            fs.writeFile(`${fFolder}/users.json`, JSON.stringify(users), error => {
                 if (error){
                     console.log("Error");
                     response.send("Error writing users file");

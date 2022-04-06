@@ -33,6 +33,7 @@ const loadEvent = async () => {
 
     const result = await parseJSON("/api/v1/users");
     const rootElement = document.getElementById("root");
+
     rootElement.insertAdjacentHTML(
         "beforeend", 
         result.map(user => userComponent(user)).join("")
@@ -52,17 +53,15 @@ const loadEvent = async () => {
             "surname": surname.value
         };
 
-        fetch("users/new", {
+        fetch("/users/new", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(userData)
         })
-        .then(async (data) =>{
+        .then(async data =>{
             const user = await data.json();
-
-            rootElement.innerHTML = "";
             rootElement.insertAdjacentHTML("beforeend", userComponent(user));
         })
     })
